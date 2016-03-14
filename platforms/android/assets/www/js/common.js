@@ -7,7 +7,7 @@ var keyUserID = "userID";
 var keyAllItems = "allItems";
 
 // Static variables for server communications
-var vendFitHost = "http://tgauch.net:8888"
+var vendFitHost = "http://192.168.1.107:1234"; //http://tgauch.net:8888"
 
 // Get the current date in yyyy-mm-dd format
 var currentDate = function() {
@@ -28,13 +28,13 @@ var currentDate = function() {
 }
 
 function storeData(key, strigifiedObj) {
-    // console.log("Storing key " + key + ": " + strigifiedObj);
+    //console.log("Storing key " + key + ": " + strigifiedObj);
     localStorage.setItem(key, strigifiedObj);
 }
 
 function getStoredData(key) {
-    // console.log("Getting key " + key + ": " + localStorage[key]);
-    return localStorage[key];
+    //console.log("Getting key " + key + ": " + localStorage.getItem(key));
+    return localStorage.getItem(key);
 }
 
 function valueStored(key) {
@@ -47,6 +47,9 @@ function valueStored(key) {
 function serverQuery(jsonData, successCallback, errorCallback) {
     // Append the <END> clause to jsonData
     jsonData = jsonData + "<END>";
+
+    //console.log("Posting to " + vendFitHost + "          " + jsonData);
+
     $.ajax({
         url: vendFitHost,
         type: 'POST',

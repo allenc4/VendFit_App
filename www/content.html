@@ -43,6 +43,7 @@
         <script src="js/jquery-2.2.0.min.js"></script>
         <script src="js/common.js"></script>
         <script src="js/user_content.js"></script>
+        <script src="js/item_content.js"></script>
 
         <script type="text/javascript">
             $(document).ready(function() {
@@ -86,21 +87,39 @@
             
                 <!-- main area -->
                 <div class="col-xs-12 col-sm-9">
-                  <h1>Welcome to VendFit</h1>
+                  <div class="text-center">
+                    <h4 id="stepBalance">Your Current Balance: 9340</h4>
+                  </div>
                   
-                  <ul class="list-group" id="main-product-list">
-                    <li class="list-group-item">
-                      <!-- TODO: Create a javascript class to generate item displays -->
-                      <div id="main-product-list-1"> 
-                        Water
+                  <ul class="list-group">
+                    <div id="main-product-list">
+
+                    </div>
+                   <!--  <li class="list-group-item">
+                      TODO: Create a javascript class to generate item displays 
+                      <div id="main-product-list">
+                        <div class="row" id="main-product-list-1">
+                          <div class="col-xs-2 col-sm-2">
+                            <img class="itemImg" src='' >
+                          </div>
+                          <div class="col-xs-6 col-sm-8">
+                            Name: Water<br>
+                            Price: 2000<br>
+                            Stock: 10<br><br>
+                            Show Nutrition Facts
+                          </div>
+                          <div class="col-xs-2 col-sm-2 pull-right">
+                              <button class="btn btn-default">Vend</button>
+                          </div>
+                        </div>
                       </div>
                     </li>
                     <hr>
                     <li class="list-group-item">
-                      <div id="main-product-list-2">
+                      <div class="row" id="main-product-list-2">
                         Gatorade
                       </div>
-                    </li>
+                    </li> -->
                   </ul>
                   
                 </div><!-- /.col-xs-12 main -->
@@ -110,8 +129,8 @@
         </div><!--/.page-container-->
 
         <script>
-            // var user = new UserContent();
-            // user.purchase("1234");
+             var user = new UserContent();
+             user.refreshData();//.purchase("1234");
         </script> 
          <script type="text/javascript" src="cordova.js"></script>
     </body>

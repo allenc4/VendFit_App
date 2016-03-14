@@ -19,7 +19,7 @@ function fitbitLogin() {
 }
 
 function loginSuccess(token, response) {
-    console.log('Success. Token: ' + token + '\nResponse: ' + response);
+    console.log('Success. Token: ' + token + '        Response: ' + response);
 
     // When the device is ready, save the user ID and the token to local storage
     document.addEventListener('deviceready', function() {
@@ -40,7 +40,7 @@ function loginSuccess(token, response) {
             if (!data.success) {
                 // If success is false, the user is most likely not created, so create the user.
                 var createUser = {
-                    operation: 'user_add',
+                    operation: 'user_create',
                     data: {
                         fitbit_id: user_id,
                         access_token: token
