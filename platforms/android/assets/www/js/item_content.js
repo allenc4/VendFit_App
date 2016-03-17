@@ -1,8 +1,20 @@
-// Constructor to create a new item object
-var ItemContent = function() {
-	this.cost = 0;
-	this.name = "";
-	this.stock = 0;
+var nutrition_link_id = "nutrition-link-";
+var nutrition_div_id = "nutrition-div-";
+
+// Function to show/hide nutrition information of a particular item
+// id: id of the div containing the nutrition information
+// link: element instance of the link object which contains the nutrition information id
+function toggleNutrition(id, link) {
+	console.log("Toggling " + id + " nutrition fact div");
+
+	if ($("#" + id).is(":visible")) {
+	  	// Element is visible, so hide it
+	  	link.innerHTML = "Show Nutrition Facts";
+	    $("#" + id).hide();
+  } else {
+	  	link.innerHTML = "Hide Nutrition Facts";
+	    $("#" + id).show();
+  }
 }
 
 // Query the master database and return an array of ItemContent objects
@@ -26,24 +38,41 @@ function createItemView(json, containerID) {
 	if (div != "") {
 		div += "<hr>\n";
 	}
-	div += "<li class=\"list-group-item\">\n";
-	div += "<div class=\"row\" id=\"main-product-list-\"" + json.id + ">\n";
-	div += "<div class=\"col-xs-2 col-sm-2\"\n";
-	div += "<img class=\"itemImg\" src='' >\n";
-	div += "</div>\n";
-    div += "<div class=\"col-xs-6 col-sm-8\">\n";
-    div += "Name: " + json.name + "<br>\n";
-    div += "Price: " + json.cost + "<br>\n";
-    div += "Stock: " + json.stock + "<br><br>\n";
-    div += "Show Nutrition Facts\n";
-    div += "</div>\n";
-    div += "<div class=\"col-xs-2 col-sm-2 pull-right\">\n";
-    div += "<button id=\"vend-" + json.id + "\" class=\"btn btn-default\">Vend</button>\n";
-    div += "</div>\n";
-    div += "</div>\n";
-    div += "</li>\n";
+	div += "<li class=\"list-group-item clearfix\">\n" +
+		"<div class=\"row\" id=\"main-product-list-\"" + json.id + ">\n" +
+		"<div class=\"col-xs-2 col-sm-2\"\n" +
+		"<img class=\"itemImg\" src='' >\n" +
+		"</div>\n" +
+		"<div class=\"col-xs-8 col-sm-8\">\n" +
+		"Name: " + json.name + "<br>\n" +
+		"Price: " + json.cost + "<br>\n" +
+		"Stock: " + json.stock + "<br><br>\n" +
 
-    console.log("div:     " + div);
+	    "<a href=\"#/\" id=\"" + nutrition_link_id + json.id + "\">Show Nutrition Facts</a>\n" +
+	    "<div id=\"" + nutrition_div_id + json.id + "\" class=\"nutrition-facts\">\n" +
+	    "<p>\n" +
+	    "Servings: " + json.servings + "<br>\n" +
+	    "Calories: " + json.calories + "<br>\n" +
+	    "Carbohydrates: " + json.carbs + "<br>\n" +
+	    "Saturated Fat: " + json.saturated_fat + "<br>\n" +
+	    "Trans Fat: " + json.trans_fat + "<br>\n" +
+	    "Sodium: " + json.sodium + "<br>\n" +
+	    "Sugar: " + json.sugars + "<br>\n" +
+	    "Protein: " + json.protein + "\n" +
+
+		"</p>\n" +
+	    "</div>\n" +
+
+	    "</div>\n" +
+	    "<div class=\"col-xs-2 col-sm-2\">\n" +
+	    "<span class=\"pull-right\">\n" +
+	    "<button id=\"vend-" + json.id + "\" class=\"btn btn-default\">Vend</button>\n" +
+	    "</span>\n" +
+	    "</div>\n" +
+	    "</div>\n" +
+	    "</li>\n";
+
+    //console.log("div:     " + div);
 
     document.getElementById("main-product-list").innerHTML = div;
       

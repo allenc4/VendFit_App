@@ -103,10 +103,24 @@ var UserContent = function() {
 
                         createItemView(data.data[i], "main-product-list");
                     }
+
+                    // Add event handlers for all items - nutrition facts and vend button clicks
+                    // Note: event handlers must be added AFTER innerHTML is updated since modifying innerHTML removes DOM events
+                    for (var i = 0; i < data.data.length; i++) {
+                        var id = data.data[i].id;
+                        (function(id) {
+                            console.log("Adding click event listener to " + id);
+                        
+                            document.getElementById(nutrition_link_id + id).addEventListener("click", function() {
+                                toggleNutrition(nutrition_div_id + id, this)
+                            }, false);
+                        })(id)
+                        
+                    }
                 }
-            }, function(jqXHR) {
+            }, function(textStatus) {
                 // Error occured communicating with the server
-                alert(JSON.stringify(jqXHR.responseText));
+                alert(textStatus);
             });
 
     };

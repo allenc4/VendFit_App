@@ -7,7 +7,7 @@ var keyUserID = "userID";
 var keyAllItems = "allItems";
 
 // Static variables for server communications
-var vendFitHost = "http://192.168.1.107:8888"; //http://tgauch.net:8888"
+var vendFitHost = "http://192.168.1.117:8888"; //http://tgauch.net:8888"
 
 // Get the current date in yyyy-mm-dd format
 var currentDate = function() {
@@ -56,15 +56,16 @@ function serverQuery(jsonData, successCallback, errorCallback) {
         dataType: 'json',
         cache: false,
         contentType: 'application/x-www-form-urlencoded',
-        data: jsonData
+        data: jsonData, 
+        timeout: 3000  // 3 second timeout
     })
     .done(function(data, textStatus, jqXHR) { 
         successCallback(data);
     })
     .fail(function(jqXHR, textStatus, errorThrown) { 
-        console.log("err: " + JSON.stringify(jqXHR.responseText));
+        console.log("err: " + textStatus);
         if (errorCallback) {
-            errorCallback(jqXHR);
+            errorCallback(textStatus);
         }
     })
 }

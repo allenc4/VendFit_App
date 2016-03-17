@@ -37,12 +37,12 @@ function loginSuccess(token, response) {
             }
         };
         serverQuery(JSON.stringify(userView), function(data) {
-            if (!data.success) {
-                // If success is false, the user is most likely not created, so create the user.
+            if (!data.success || data == null || data.data == null || Object.keys(data.data).length == 0) {
+                // If success is false (or data object is empty), the user is most likely not created, so create the user.
                 var createUser = {
                     operation: 'user_create',
                     data: {
-                        fitbit_id: user_id,
+                        id: user_id,
                         access_token: token
                     }
                 };
@@ -55,9 +55,9 @@ function loginSuccess(token, response) {
                         // User created successfully, so redirect to the main page
                         redirect("content.html");
                     }
-                }, function (jqXHR) {
+                }, function (textStatus) {
                     // Something went wrong communicating with the server
-                    alert(JSON.stringify(jqXHR.responseText));
+                    alert(textStatus);
                 });
             } else {
                 // The user is created, so update the access token
@@ -77,15 +77,15 @@ function loginSuccess(token, response) {
                         // User updated successfully, so redirect to the main page
                         redirect("content.html");
                     }
-                }, function(jqXHR) {
+                }, function (textStatus) {
                     // Something went wrong communicating with the server
-                    alert(JSON.stringify(jqXHR.responseText));
+                    alert(textStatus);
                 });
             }
 
-        }, function(jqXHR) {
-            // Error occured communicating with the server
-            alert(JSON.stringify(jqXHR.responseText));
+        }, function (textStatus) {
+            // Something went wrong communicating with the server
+            alert(textStatus);
         });
     });
 }
