@@ -42,7 +42,7 @@ function loginSuccess(token, response) {
                 var createUser = {
                     operation: 'user_create',
                     data: {
-                        id: user_id,
+                        fitbit_id: user_id,
                         access_token: token
                     }
                 };

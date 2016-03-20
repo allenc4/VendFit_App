@@ -7,7 +7,7 @@ var keyUserID = "userID";
 var keyAllItems = "allItems";
 
 // Static variables for server communications
-var vendFitHost = "http://192.168.1.117:8888"; //http://tgauch.net:8888"
+var vendFitHost = "http://10.200.99.28:8888"; //http://tgauch.net:8888"
 
 // Get the current date in yyyy-mm-dd format
 var currentDate = function() {

@@ -46,7 +46,7 @@ var UserContent = function() {
 
     	console.log("Running refreshData function");
 
-        var fitbitRequestURL = 'https://api.fitbit.com/1/user/' + userID +'/activities/date/' + currentDate() + '.json';
+        var fitbitRequestURL = 'https://api.fitbit.com/1/user/' + userID +'/activities/steps/date/' + currentDate() + '/1d.json';
         
         console.log("Requested URL: " + fitbitRequestURL);
 
@@ -65,63 +65,109 @@ var UserContent = function() {
                 // TODO: Parse the data returned, update total steps
               	console.log("Returned data: " + JSON.stringify(data));
               	console.log("Status code: " + jqXHR.status);
-                stepsTotal = 100; // Replace with actual data
-              	alert('got data!'); 
+                
+                // Update total step count and current balance
+                updateTotalSteps(data[0].value);
 
                 // If a callback function was specified, call it
-                if (successCallback != null && successCallback != undefined) {
-                    successCallback();
-                }
+                // if (successCallback != null && successCallback != undefined) {
+                //     successCallback();
+                // }
             })
             .fail(function(jqXHR, textStatus, errorThrown) { 
             	console.log("err: " + JSON.stringify(jqXHR.responseText));
             	alert('error!'); 
             });
 
-        // Query the VendFit server to get all available items from machine 1
-        var items = {
-            operation: 'item_all',
-            data: {
-                id: '1'
-            }
-        };
-
-        serverQuery(JSON.stringify(items), function(data) {
-                if (!data.success) {
+        // Update the VendFit server to update the total steps
+        function updateTotalSteps(totalStepCount) {
+            var userUpdate = {
+                operation: 'user_update',
+                data: {
+                    id: userID,
+                    total_steps: totalStepCount
+                }
+            };
+            serverQuery(JSON.stringify(userUpdate), function(data) {
+                 if (!data.success) {
                     // If success is false, something went wrong
                     alert(data.message);
                 } else {
-                    // Retrieving the items was successful, so update the app view
-                    console.log(JSON.stringify(data));
-                    for (var i = 0; i < data.data.length; i++) {
-                        //var item = data.data[i];
-
-                        if (i == 0) {
-                            // Empty the container
-                            document.getElementById("main-product-list").innerHTML = "";
-                        }
-
-                        createItemView(data.data[i], "main-product-list");
-                    }
-
-                    // Add event handlers for all items - nutrition facts and vend button clicks
-                    // Note: event handlers must be added AFTER innerHTML is updated since modifying innerHTML removes DOM events
-                    for (var i = 0; i < data.data.length; i++) {
-                        var id = data.data[i].id;
-                        (function(id) {
-                            console.log("Adding click event listener to " + id);
-                        
-                            document.getElementById(nutrition_link_id + id).addEventListener("click", function() {
-                                toggleNutrition(nutrition_div_id + id, this)
-                            }, false);
-                        })(id)
-                        
-                    }
+                    // Updating total steps was successful. Call function to get current available user balance
+                    getUserBalance();
                 }
+
             }, function(textStatus) {
                 // Error occured communicating with the server
                 alert(textStatus);
             });
+        }
+
+        // Query the VendFit server to get the current available user balance
+        function getUserBalance() {
+            var userInfo = {
+                operation: 'user_basic',
+                data: {
+                    id: userID
+                }
+            };
+            serverQuery(JSON.stringify(userInfo), function(data) {
+                // Update the step balance div with the current balance for the user
+                document.getElementById("step-balance").innerHTML = data.current_balance;
+
+            }, function(textStatus) {
+                // Error occured communicating with the server
+                alert(textStatus);
+            });
+        }
+
+
+        function getAvailableItems() {
+            // Query the VendFit server to get all available items from machine 1
+            var items = {
+                operation: 'item_all',
+                data: {
+                    id: '1'
+                }
+            };
+
+            serverQuery(JSON.stringify(items), function(data) {
+                    if (!data.success) {
+                        // If success is false, something went wrong
+                        alert(data.message);
+                    } else {
+                        // Retrieving the items was successful, so update the app view
+                        console.log(JSON.stringify(data));
+                        for (var i = 0; i < data.data.length; i++) {
+                            //var item = data.data[i];
+
+                            if (i == 0) {
+                                // Empty the container
+                                document.getElementById("main-product-list").innerHTML = "";
+                            }
+
+                            createItemView(data.data[i], "main-product-list");
+                        }
+
+                        // Add event handlers for all items - nutrition facts and vend button clicks
+                        // Note: event handlers must be added AFTER innerHTML is updated since modifying innerHTML removes DOM events
+                        for (var i = 0; i < data.data.length; i++) {
+                            var id = data.data[i].id;
+                            (function(id) {
+                                console.log("Adding click event listener to " + id);
+                            
+                                document.getElementById(nutrition_link_id + id).addEventListener("click", function() {
+                                    toggleNutrition(nutrition_div_id + id, this)
+                                }, false);
+                            })(id)
+                            
+                        }
+                    }
+                }, function(textStatus) {
+                    // Error occured communicating with the server
+                    alert(textStatus);
+                });
+        }
 
     };
 
