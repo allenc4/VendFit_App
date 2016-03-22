@@ -1,5 +1,6 @@
 var nutrition_link_id = "nutrition-link-";
 var nutrition_div_id = "nutrition-div-";
+var vend_button_id = "vend-";
 
 // Function to show/hide nutrition information of a particular item
 // id: id of the div containing the nutrition information
@@ -66,7 +67,7 @@ function createItemView(json, containerID) {
 	    "</div>\n" +
 	    "<div class=\"col-xs-2 col-sm-2\">\n" +
 	    "<span class=\"pull-right\">\n" +
-	    "<button id=\"vend-" + json.id + "\" class=\"btn btn-default\">Vend</button>\n" +
+	    "<button id=\"" + vend_button_id + json.id + "\" class=\"btn btn-default\">Vend</button>\n" +
 	    "</span>\n" +
 	    "</div>\n" +
 	    "</div>\n" +
@@ -77,3 +78,55 @@ function createItemView(json, containerID) {
     document.getElementById("main-product-list").innerHTML = div;
       
 }
+
+// Define ItemContent constructor
+var ItemContent = function(name, id, cost, stock) {
+    this._name = "";
+    this._id = "";
+    this._cost = 0;
+    this._stock = 0;
+
+    if (name) {
+    	this._name = name;
+    }
+    if (id) {
+    	this._id = id;
+    }
+    if (cost) {
+    	this._cost = cost;
+    }
+    if (stock) {
+    	this._stock = stock;
+    }
+
+}
+
+// Getters and Setters
+ItemContent.prototype.getName = function() {
+	return this._name;
+};
+ItemContent.prototype.setName = function(name) {
+	this._name = name;
+};
+
+ItemContent.prototype.getId = function() {
+	return this._id;
+};
+ItemContent.prototype.setId = function(id) {
+	this._id = id;
+};
+
+ItemContent.prototype.getCost = function() {
+	return this._cost;
+};
+ItemContent.prototype.setCost = function(cost) {
+	this._cost = cost;
+};
+
+ItemContent.prototype.getStock = function() {
+	return this._stock;
+};
+ItemContent.prototype.setStock = function(stock) {
+	this._stock = stock;
+};
+

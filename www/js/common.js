@@ -7,7 +7,7 @@ var keyUserID = "userID";
 var keyAllItems = "allItems";
 
 // Static variables for server communications
-var vendFitHost = "http://10.200.99.28:8888"; //http://tgauch.net:8888"
+var vendFitHost = "http://tgauch.net:8888";
 
 // Get the current date in yyyy-mm-dd format
 var currentDate = function() {
@@ -48,7 +48,7 @@ function serverQuery(jsonData, successCallback, errorCallback) {
     // Append the <END> clause to jsonData
     jsonData = jsonData + "<END>";
 
-    //console.log("Posting to " + vendFitHost + "          " + jsonData);
+    // console.log("Posting to " + vendFitHost + "          " + jsonData);
 
     $.ajax({
         url: vendFitHost,
@@ -57,7 +57,7 @@ function serverQuery(jsonData, successCallback, errorCallback) {
         cache: false,
         contentType: 'application/x-www-form-urlencoded',
         data: jsonData, 
-        timeout: 3000  // 3 second timeout
+        timeout: 10000  // 10 second timeout
     })
     .done(function(data, textStatus, jqXHR) { 
         successCallback(data);
