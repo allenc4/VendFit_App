@@ -13,6 +13,10 @@ var auth_params = {
     }
 };
 
+$(document).ready(function() {
+     $("#userLoginClick").bind("click", fitbitLogin);
+});
+
 function fitbitLogin() {
     console.log('login clicked');
     $.oauth2Implicit(auth_params, loginSuccess, loginFail);
@@ -53,7 +57,7 @@ function loginSuccess(token, response) {
                         alert(data.message);
                     } else {
                         // User created successfully, so redirect to the main page
-                        redirect("content.html");
+                        redirect("main.html");
                     }
                 }, function (textStatus) {
                     // Something went wrong communicating with the server
@@ -75,7 +79,7 @@ function loginSuccess(token, response) {
                         alert(data.message);
                     } else {
                         // User updated successfully, so redirect to the main page
-                        redirect("content.html");
+                        redirect("main.html");
                     }
                 }, function (textStatus) {
                     // Something went wrong communicating with the server
