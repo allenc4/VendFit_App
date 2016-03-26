@@ -19,8 +19,17 @@
                         {
                             "xml": "<feature name=\"SQLitePlugin\"><param name=\"android-package\" value=\"io.liteglue.SQLitePlugin\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Cache\"><param name=\"android-package\" value=\"org.apache.cordova.plugin.cache.Cache\" /></feature>",
+                            "count": 1
                         }
                     ]
+                }
+            },
+            "AndroidManifest.xml": {
+                "parents": {
+                    "/manifest": []
                 }
             }
         }
@@ -33,6 +42,9 @@
             "PACKAGE_NAME": "com.vendfit.app"
         },
         "cordova-sqlite-storage": {
+            "PACKAGE_NAME": "com.vendfit.app"
+        },
+        "org.apache.cordova.plugin.cache": {
             "PACKAGE_NAME": "com.vendfit.app"
         }
     },
@@ -60,11 +72,19 @@
             "clobbers": [
                 "SQLitePlugin"
             ]
+        },
+        {
+            "file": "plugins/org.apache.cordova.plugin.cache/www/Cache.js",
+            "id": "org.apache.cordova.plugin.cache.Cache",
+            "clobbers": [
+                "cache"
+            ]
         }
     ],
     "plugin_metadata": {
         "cordova-plugin-whitelist": "1.2.1",
         "cordova-plugin-inappbrowser": "1.2.0",
-        "cordova-sqlite-storage": "0.7.14"
+        "cordova-sqlite-storage": "0.7.14",
+        "org.apache.cordova.plugin.cache": "1.0.5"
     }
 }

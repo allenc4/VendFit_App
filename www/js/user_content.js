@@ -34,13 +34,29 @@
 
 // Define UserContent constructor
 var UserContent = function() {
-    console.log("Running constructor");
     this.userID = getStoredData(prefixOauthStorage + keyUserID);
     this.accessToken = getStoredData(prefixOauthStorage + keyAccessToken);
     this.stepBalance = 0;
-
-    console.log("Done running constructor");
 }
+
+UserContent.fromJSON = function(json) {
+    var data = JSON.parse(json); // Parsing the json string.
+    var user = new UserContent();
+    user.setStepBalance(data.stepBalance);
+    return user;
+}
+
+UserContent.prototype.getStepBalance = function() {
+    return this.stepBalance;
+};
+UserContent.prototype.setStepBalance = function(balance) {
+    this.stepBalance = balance;
+};
+
+UserContent.prototype.toJSON = function() {
+    return JSON.stringify({userID: this.userID, accessToken: this.accessToken, stepBalance: this.stepBalance});
+};
+
 
 // Fitbit API requests to refresh user steps
 UserContent.prototype.refreshData = function(successCallback) {
@@ -69,7 +85,7 @@ UserContent.prototype.refreshData = function(successCallback) {
         }
     })
 	.done(function(data, textStatus, jqXHR) { 
-        // TODO: Parse the data returned, update total steps
+        // Parse the data returned, update total steps
       	console.log("Returned data: " + JSON.stringify(data));
       	console.log("Status code: " + jqXHR.status);
         
@@ -163,7 +179,7 @@ UserContent.prototype.refreshData = function(successCallback) {
                     (function(id) {
                         console.log("Adding click event listeners to " + id);
 
-                        var item = new ItemContent(data.data[i].name, id, data.data[i].cost, data.data[i].stock);
+                        var item = new ItemContent(data.data[i].name, id, data.data[i].cost, data.data[i].stock, data.data[i].servings, data.data[i].pic);
                     
                         document.getElementById(nutrition_link_id + id).addEventListener("click", function() {
                             toggleNutrition(nutrition_div_id + id, this)
@@ -212,7 +228,25 @@ UserContent.prototype.purchase = function(item) {
             alert(data.message);
         } else {
             // Purchase was successful. Run refresh again to update current balance and any stock changes
-            userInstance.refreshData();
+            //userInstance.refreshData();
+            // Update current balance
+            userInstance.stepBalance -= item.getCost();
+
+            // TODO if the option to automatically log food is disabled, bring up the add_to_log page. Otherwise, run refreshData again
+            // Create a JSON object with the item and step balance
+            // Base64-encode the object; yields a url-appending string
+            // redirect to add_to_log page with /#... and fragment identifier (base64-encoded object)
+
+            var params = {
+                item: item.toJSON(),
+                user: userInstance.toJSON()
+            };
+
+            params = Base64.encode(JSON.stringify(params));
+            // console.log("params: " + params);
+
+            redirect("add_to_log.html#" + params);
+            //createAddToLogForm("add-to-log-form", item, this.stepBalance);
         }
 
     }, function(textStatus) {
@@ -221,3 +255,67 @@ UserContent.prototype.purchase = function(item) {
     });
 
 };
+
+UserContent.prototype.addToFoodLog = function(item) {
+    console.log("Running addToFoodLog function for itemID: " + item.getId());
+
+    var userInstance = this;
+
+    // First, we need to get the Unit ID of the item from Fitbit
+    var fitbitUnitRequestURL = "https://api.fitbit.com/1/foods/" + item.getId() + ".json";
+    
+    $.ajax({
+        url: fitbitUnitRequestURL,
+        type: 'GET',
+        dataType: 'json',
+        cache: false,
+        contentType: 'application/x-www-form-urlencoded',
+        beforeSend: function(jqXHR, settings) { 
+            jqXHR.setRequestHeader('Authorization','Bearer ' + userInstance.accessToken); 
+        }
+    })
+    .done(function(data, textStatus, jqXHR) { 
+        //Parse the data returned for the serving units
+        console.log("Returned data: " + JSON.stringify(data));
+        console.log("Status code: " + jqXHR.status);
+        var unitType = data.food.defaultUnit.id;
+        var defaultAmount = data.food.defaultServingSize;
+
+        // Now add the item to the food log
+        var fitbitFoodLogRequestURL = "https://api.fitbit.com/1/user/" + userInstance.userID + "/foods/log.json";
+        $.ajax({
+            url: fitbitFoodLogRequestURL,
+            type: 'POST',
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            beforeSend: function(jqXHR, settings) { 
+                jqXHR.setRequestHeader('Authorization','Bearer ' + userInstance.accessToken); 
+            },
+            data: {
+                foodId: item.getId(),
+                mealTypeId: "7",
+                unitId: unitType,
+                amount: defaultAmount * item.getServings(),
+                date: currentDate()
+            }
+        })
+        .done(function(data, textStatus, jqXHR) {
+            console.log("Returned data: " + JSON.stringify(data));
+            console.log("Status code: " + jqXHR.status);
+            redirect("main.html");
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) { 
+            console.log("err: " + JSON.stringify(jqXHR.responseText));
+            alert("An error occured while attempting to log item id " + item.getId() + " to the Fitbit food log."); 
+            redirect("main.html");
+        });
+        
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) { 
+        console.log("err: " + JSON.stringify(jqXHR.responseText));
+        alert("An error occured while querying Fitbit for the food information."); 
+        redirect("main.html");
+    });
+
+}

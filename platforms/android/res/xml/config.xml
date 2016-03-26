@@ -11,6 +11,9 @@
     <feature name="SQLitePlugin">
         <param name="android-package" value="io.liteglue.SQLitePlugin" />
     </feature>
+    <feature name="Cache">
+        <param name="android-package" value="org.apache.cordova.plugin.cache.Cache" />
+    </feature>
     <allow-intent href="market:*" />
     <name>VendFitApp</name>
     <description>

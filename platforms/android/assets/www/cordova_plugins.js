@@ -22,6 +22,13 @@ module.exports = [
         "clobbers": [
             "SQLitePlugin"
         ]
+    },
+    {
+        "file": "plugins/org.apache.cordova.plugin.cache/www/Cache.js",
+        "id": "org.apache.cordova.plugin.cache.Cache",
+        "clobbers": [
+            "cache"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -29,7 +36,8 @@ module.exports.metadata =
 {
     "cordova-plugin-whitelist": "1.2.1",
     "cordova-plugin-inappbrowser": "1.2.0",
-    "cordova-sqlite-storage": "0.7.14"
-}
+    "cordova-sqlite-storage": "0.7.14",
+    "org.apache.cordova.plugin.cache": "1.0.5"
+};
 // BOTTOM OF METADATA
 });

@@ -15,6 +15,9 @@
         },
         "cordova-sqlite-storage": {
             "PACKAGE_NAME": "com.vendfit.app"
+        },
+        "org.apache.cordova.plugin.cache": {
+            "PACKAGE_NAME": "com.vendfit.app"
         }
     },
     "dependent_plugins": {}

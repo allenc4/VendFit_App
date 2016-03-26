@@ -89,6 +89,7 @@
                 // acToken =   gup(url, 'access_token');
                 // tokenType = gup(url, 'token_type');
                 // expiresIn = gup(url, 'expires_in');
+
                 loginWindow.close();
 
                 if (access_token) {

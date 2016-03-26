@@ -9,13 +9,19 @@ var auth_params = {
     redirect_uri: 'http://127.0.0.1:8888/oauth',
     other_params: {
         expires_in: '2592000',
-        scope: 'activity'
+        scope: 'activity nutrition'
     }
 };
 
-$(document).ready(function() {
+document.addEventListener('deviceready', onDeviceReady);
+
+function onDeviceReady() {
      $("#userLoginClick").bind("click", fitbitLogin);
-});
+
+     if (valueStored(prefixOauthStorage + keyAccessToken) && valueStored(prefixOauthStorage + keyUserID)) {
+        fitbitLogin();
+     }
+};
 
 function fitbitLogin() {
     console.log('login clicked');
@@ -96,10 +102,7 @@ function loginSuccess(token, response) {
 
 function loginFail(error) {
     console.log('Error: ' + error);
-}
-
-function redirect(page) {
-    window.open(page, '_self');
+    alert("Failure logging in: " + error);
 }
 
 // Checks if the token and user ID values are stored in the file system
