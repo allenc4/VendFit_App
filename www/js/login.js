@@ -16,11 +16,54 @@ var auth_params = {
 document.addEventListener('deviceready', onDeviceReady);
 
 function onDeviceReady() {
+
+     var $loading = $('#fitbitLoading').hide();
+
      $("#userLoginClick").bind("click", fitbitLogin);
 
      if (valueStored(prefixOauthStorage + keyAccessToken) && valueStored(prefixOauthStorage + keyUserID)) {
-        fitbitLogin();
-     }
+        var userID = getStoredData(prefixOauthStorage + keyUserID);
+        var token = getStoredData(prefixOauthStorage + keyAccessToken);
+
+        // Show the loading progress bar and run a simple ajax request to see if access token is still valid
+        $loading.show();
+        var fitbitRequestURL = 'https://api.fitbit.com/1/user/' + userID +'/activities/steps/date/' + currentDate() + '/1d.json';
+    
+        console.log("Requested URL: " + fitbitRequestURL + " with token: " + token);
+
+        // Get the total number of steps for the user
+        $.ajax({
+            url: fitbitRequestURL,
+            type: 'GET',
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/x-www-form-urlencoded',
+            beforeSend: function(jqXHR, settings) { 
+                jqXHR.setRequestHeader('Authorization','Bearer ' + token); 
+            }
+        })
+        .done(function(data, textStatus, jqXHR) { 
+            $loading.hide();
+            // Parse the data returned, update total steps
+            console.log("Returned data: " + JSON.stringify(data));
+            console.log("Status code: " + jqXHR.status);
+            
+            // Authentication token is valid, so proceed to login success
+            loginSuccess(token, userID);
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) { 
+            $loading.hide();
+            var err = JSON.parse(jqXHR.responseText).errors[0].errorType;
+
+            console.log("err: " + err);
+            // TODO - If the response is because of bad authentication token, tell the user
+            if (err === "invalid_token") {
+                alert("Access token invalid. Please sign in with Fitbit again."); 
+            } else {
+                alert("Error communicating with Fitbit. " + err);
+            }
+        });
+    }
 };
 
 function fitbitLogin() {
@@ -28,22 +71,24 @@ function fitbitLogin() {
     $.oauth2Implicit(auth_params, loginSuccess, loginFail);
 }
 
-function loginSuccess(token, response) {
-    console.log('Success. Token: ' + token + '        Response: ' + response);
+function loginSuccess(token, userID) {
+    console.log('Success. User ID: ' + userID + ', token: ' + token);
 
     // When the device is ready, save the user ID and the token to local storage
     document.addEventListener('deviceready', function() {
-        var user_id = response.split("user_id=")[1].split("&")[0];
+        // var user_id = response.split("user_id=")[1].split("&")[0];
+        var $loading = $('#fitbitLoading').hide();
+        $loading.show();
 
         storeData(prefixOauthStorage + keyAccessToken, token);
-        storeData(prefixOauthStorage + keyUserID, user_id);
+        storeData(prefixOauthStorage + keyUserID, userID);
 
         // Check if a user already exists in the master database. If so, update the access token.
         // Otherwise, create the user.
         var userView = {
             operation: 'user_basic',
             data: {
-                id: user_id
+                id: userID
             }
         };
         serverQuery(JSON.stringify(userView), function(data) {
@@ -52,7 +97,7 @@ function loginSuccess(token, response) {
                 var createUser = {
                     operation: 'user_create',
                     data: {
-                        fitbit_id: user_id,
+                        fitbit_id: userID,
                         access_token: token
                     }
                 };
@@ -60,13 +105,16 @@ function loginSuccess(token, response) {
                 serverQuery(JSON.stringify(createUser), function(data) {
                     if (!data.success) {
                         // Something went wrong creating the user
+                        $loading.hide();
                         alert(data.message);
                     } else {
                         // User created successfully, so redirect to the main page
+                        $loading.hide();
                         redirect("main.html");
                     }
                 }, function (textStatus) {
                     // Something went wrong communicating with the server
+                    $loading.hide();
                     alert(textStatus);
                 });
             } else {
@@ -74,7 +122,7 @@ function loginSuccess(token, response) {
                 var userUpdate = {
                     operation: 'user_update',
                     data: {
-                        id: user_id,
+                        id: userID,
                         access_token: token
                     }
                 };
@@ -82,26 +130,30 @@ function loginSuccess(token, response) {
                 serverQuery(JSON.stringify(userUpdate), function(data) {
                     if (!data.success) {
                         // Something went wrong updating the user
+                        $loading.hide();
                         alert(data.message);
                     } else {
                         // User updated successfully, so redirect to the main page
+                        $loading.hide();
                         redirect("main.html");
                     }
                 }, function (textStatus) {
                     // Something went wrong communicating with the server
+                    $loading.hide();
                     alert(textStatus);
                 });
             }
 
         }, function (textStatus) {
             // Something went wrong communicating with the server
+            $loading.hide();
             alert(textStatus);
         });
     });
 }
 
 function loginFail(error) {
-    console.log('Error: ' + error);
+    console.log('Failed to login. ' + error);
     alert("Failure logging in: " + error);
 }
 

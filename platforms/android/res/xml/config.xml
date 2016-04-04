@@ -14,6 +14,9 @@
     <feature name="Cache">
         <param name="android-package" value="org.apache.cordova.plugin.cache.Cache" />
     </feature>
+    <feature name="Toast">
+        <param name="android-package" value="nl.xservices.plugins.Toast" />
+    </feature>
     <allow-intent href="market:*" />
     <name>VendFitApp</name>
     <description>

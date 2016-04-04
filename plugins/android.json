@@ -18,6 +18,9 @@
         },
         "org.apache.cordova.plugin.cache": {
             "PACKAGE_NAME": "com.vendfit.app"
+        },
+        "cordova-plugin-x-toast": {
+            "PACKAGE_NAME": "com.vendfit.app"
         }
     },
     "dependent_plugins": {}

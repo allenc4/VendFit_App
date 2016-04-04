@@ -1,7 +1,21 @@
+html {
+    height: 100%;
+}
+
 body {
   padding-top: 40px;
   padding-bottom: 40px;
-  background-color: #eee;
+  height: 100%;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  background: -webkit-linear-gradient(top, rgb(32, 36, 63) 0%, rgb(67, 73, 107) 66%, rgb(52, 58, 92) 100%);
+  background: -o-linear-gradient(top, rgb(32, 36, 63) 0%, rgb(67, 73, 107) 66%, rgb(52, 58, 92) 100%);
+  background: -ms-linear-gradient(top, rgb(32, 36, 63) 0%, rgb(67, 73, 107) 66%, rgb(52, 58, 92) 100%);
+  background: -moz-linear-gradient(top, rgb(32, 36, 63) 0%, rgb(67, 73, 107) 66%, rgb(52, 58, 92) 100%);
+  background: linear-gradient(to bottom, rgb(32, 36, 63) 0%, rgb(67, 73, 107) 66%, rgb(52, 58, 92) 100%);
+  color: white;
 }
 
 .user-signin {
@@ -17,4 +31,17 @@ body {
   margin-top: 25px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
+}
+
+.container-fluid{
+  height:100%;
+  display:table;
+  width: 100%;
+  padding: 0;
+}
+
+.row-fluid {
+  height: 100%; 
+  display:table-cell; 
+  vertical-align: middle;
 }

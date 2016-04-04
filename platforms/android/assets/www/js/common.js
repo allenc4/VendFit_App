@@ -1,3 +1,13 @@
+$(document).ready(function() {
+    $(":button").on("touchstart mouseenter", function(){ 
+        console.log("touch start");
+    });
+    $(":button").on("mouseleave touchmove click", function(){ 
+        console.log("touch end");
+    });
+});
+
+
 // Static variables for local storage key names
 var prefixOauthStorage = "oauthStorage-"; // Prefix for oauth storage keys
 var keyAccessToken = "accessToken";
@@ -5,9 +15,10 @@ var keyUserID = "userID";
 
 // Static variables for misc data storage
 var keyAllItems = "allItems";
+var keyAutoLog = "autoLogPurchases";
 
 // Static variables for server communications
-var vendFitHost = "http://192.168.1.109:1234";  //"http://tgauch.net:8888";
+var vendFitHost = "http://192.168.1.106:1234";  //"http://tgauch.net:8888";
 
 // Get the current date in yyyy-mm-dd format
 var currentDate = function() {
@@ -67,7 +78,11 @@ function serverQuery(jsonData, successCallback, errorCallback) {
         successCallback(data);
     })
     .fail(function(jqXHR, textStatus, errorThrown) { 
-        console.log("err: " + textStatus);
+        console.log(JSON.stringify(jqXHR));
+        if (textStatus == null || textStatus == undefined || textStatus === "error") {
+            textStatus = "Error communicating with the VendFit Server.";
+        }
+        console.log(textStatus);
         if (errorCallback) {
             errorCallback(textStatus);
         }

@@ -23,6 +23,10 @@
                         {
                             "xml": "<feature name=\"Cache\"><param name=\"android-package\" value=\"org.apache.cordova.plugin.cache.Cache\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -45,6 +49,9 @@
             "PACKAGE_NAME": "com.vendfit.app"
         },
         "org.apache.cordova.plugin.cache": {
+            "PACKAGE_NAME": "com.vendfit.app"
+        },
+        "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.vendfit.app"
         }
     },
@@ -79,12 +86,24 @@
             "clobbers": [
                 "cache"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
+            "id": "cordova-plugin-x-toast.Toast",
+            "clobbers": [
+                "window.plugins.toast"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-x-toast/test/tests.js",
+            "id": "cordova-plugin-x-toast.tests"
         }
     ],
     "plugin_metadata": {
         "cordova-plugin-whitelist": "1.2.1",
         "cordova-plugin-inappbrowser": "1.2.0",
         "cordova-sqlite-storage": "0.7.14",
-        "org.apache.cordova.plugin.cache": "1.0.5"
+        "org.apache.cordova.plugin.cache": "1.0.5",
+        "cordova-plugin-x-toast": "2.5.0"
     }
 }

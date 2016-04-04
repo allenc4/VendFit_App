@@ -29,6 +29,17 @@ module.exports = [
         "clobbers": [
             "cache"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
+        "id": "cordova-plugin-x-toast.Toast",
+        "clobbers": [
+            "window.plugins.toast"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-x-toast/test/tests.js",
+        "id": "cordova-plugin-x-toast.tests"
     }
 ];
 module.exports.metadata = 
@@ -37,7 +48,8 @@ module.exports.metadata =
     "cordova-plugin-whitelist": "1.2.1",
     "cordova-plugin-inappbrowser": "1.2.0",
     "cordova-sqlite-storage": "0.7.14",
-    "org.apache.cordova.plugin.cache": "1.0.5"
+    "org.apache.cordova.plugin.cache": "1.0.5",
+    "cordova-plugin-x-toast": "2.5.0"
 };
 // BOTTOM OF METADATA
 });

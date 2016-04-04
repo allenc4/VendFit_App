@@ -39,39 +39,39 @@ function createItemView(json, containerID) {
 	if (div != "") {
 		div += "<hr>\n";
 	}
-	div += "<li class=\"list-group-item clearfix\">\n" +
+	div += "<li class=\"list-group-item clearfix\" id=\"list-group-item-\"" + json.id + "\">\n" +
 		"<div class=\"row\" id=\"main-product-list-\"" + json.id + ">\n" +
 		"<div class=\"col-xs-2 col-sm-2\">\n" +
-        "<img class=\"itemImg\" src=\"" + json.pic + "\">\n" +
-        "</div>" +
+      "<img class=\"itemImg\" src=\"" + json.pic + "\">\n" +
+      "</div>" +
 		"<div class=\"col-xs-8 col-sm-8\">\n" +
 		"Name: " + json.name + "<br>\n" +
 		"Price: " + json.cost + "<br>\n" +
 		"Stock: " + json.stock + "<br><br>\n" +
 
-	    "<a href=\"#/\" id=\"" + nutrition_link_id + json.id + "\">Show Nutrition Facts</a>\n" +
-	    "<div id=\"" + nutrition_div_id + json.id + "\" class=\"nutrition-facts\">\n" +
-	    "<p>\n" +
-	    "Servings: " + json.servings + "<br>\n" +
-	    "Calories: " + json.calories + "<br>\n" +
-	    "Carbohydrates: " + json.carbs + "<br>\n" +
-	    "Saturated Fat: " + json.saturated_fat + "<br>\n" +
-	    "Trans Fat: " + json.trans_fat + "<br>\n" +
-	    "Sodium: " + json.sodium + "<br>\n" +
-	    "Sugar: " + json.sugars + "<br>\n" +
-	    "Protein: " + json.protein + "\n" +
+    "<a href=\"#/\" id=\"" + nutrition_link_id + json.id + "\" class=\"nutrition-facts-title\">Show Nutrition Facts</a>\n" +
+    "<div id=\"" + nutrition_div_id + json.id + "\" class=\"nutrition-facts\">\n" +
+    "<p>\n" +
+    "Servings: " + json.servings + "<br>\n" +
+    "Calories: " + json.calories + "<br>\n" +
+    "Carbohydrates: " + json.carbs + "<br>\n" +
+    "Saturated Fat: " + json.saturated_fat + "<br>\n" +
+    "Trans Fat: " + json.trans_fat + "<br>\n" +
+    "Sodium: " + json.sodium + "<br>\n" +
+    "Sugar: " + json.sugars + "<br>\n" +
+    "Protein: " + json.protein + "\n" +
 
 		"</p>\n" +
-	    "</div>\n" +
+    "</div>\n" +
 
-	    "</div>\n" +
-	    "<div class=\"col-xs-2 col-sm-2\">\n" +
-	    "<span class=\"pull-right\">\n" +
-	    "<button id=\"" + vend_button_id + json.id + "\" class=\"btn btn-default\">Vend</button>\n" +
-	    "</span>\n" +
-	    "</div>\n" +
-	    "</div>\n" +
-	    "</li>\n";
+    "</div>\n" +
+    "<div class=\"col-xs-2 col-sm-2\">\n" +
+    "<span class=\"pull-right\">\n" +
+    "<button id=\"" + vend_button_id + json.id + "\" class=\"btn btn-default vend-btn\">Vend</button>\n" +
+    "</span>\n" +
+    "</div>\n" +
+    "</div>\n" +
+    "</li>\n";
 
     //console.log("div:     " + div);
 

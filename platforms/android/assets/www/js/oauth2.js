@@ -85,6 +85,7 @@
             if (event.url.indexOf(options.redirect_uri) != -1) {
                 var response = event.url.split("#")[1];
                 var access_token = response.split("access_token=")[1];
+                var user_id = response.split("user_id=")[1].split("&")[0];
                 var error = response.split("error=")[1];
                 // acToken =   gup(url, 'access_token');
                 // tokenType = gup(url, 'token_type');
@@ -93,7 +94,7 @@
                 loginWindow.close();
 
                 if (access_token) {
-                    successCallback(access_token, response);
+                    successCallback(access_token, user_id);
                 } else if (error) {
                     errorCallback(error);
                 }
