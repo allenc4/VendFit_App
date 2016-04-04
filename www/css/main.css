@@ -1,0 +1,85 @@
+body {
+  padding-top: 51px;  
+  margin: 0;
+  
+  background: -webkit-linear-gradient(top, rgb(32, 36, 63) 0%, rgb(67, 73, 107) 66%, rgb(52, 58, 92) 100%);
+  background: -o-linear-gradient(top, rgb(32, 36, 63) 0%, rgb(67, 73, 107) 66%, rgb(52, 58, 92) 100%);
+  background: -ms-linear-gradient(top, rgb(32, 36, 63) 0%, rgb(67, 73, 107) 66%, rgb(52, 58, 92) 100%);
+  background: -moz-linear-gradient(top, rgb(32, 36, 63) 0%, rgb(67, 73, 107) 66%, rgb(52, 58, 92) 100%);
+  background: linear-gradient(to bottom, rgb(32, 36, 63) 0%, rgb(67, 73, 107) 66%, rgb(52, 58, 92) 100%);
+  color: white;
+}
+
+.navbar-header, .navbar-brand {
+  background-color: #1e243e;
+  color: white !important;
+}
+
+.text-center {
+  padding-top: 20px;
+}
+.col-xs-12 {
+  /*background-color: #fff;*/
+  background: none transparent;
+}
+
+#sidebar-nav {
+  height: 100%;
+  padding-right: 0;
+  padding-top: 20px;
+}
+#sidebar-nav .nav {
+  width: 95%;
+}
+#sidebar-nav li {
+  border: 2px #000000 solid;
+  border-bottom-width:1px;
+}
+
+.navbar-toggle {
+  float: left;
+}
+
+/* collapsed sidebar styles */
+@media screen and (max-width: 767px) {
+  .row-offcanvas {
+    position: relative;
+    -webkit-transition: all 0.25s ease-out;
+    -moz-transition: all 0.25s ease-out;
+    transition: all 0.25s ease-out;
+  }
+  .row-offcanvas-right
+  .sidebar-offcanvas {
+    right: -40%;
+  }
+
+  .row-offcanvas-left
+  .sidebar-offcanvas {
+    left: -40%;
+  }
+  .row-offcanvas-right.active {
+    right: 40%;
+  }
+  .row-offcanvas-left.active {
+    left: 40%;
+  }
+  .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 40%;
+  }
+  #sidebar-nav {
+    padding-top:0;
+  }
+}
+
+/* To remove border and scroll from iframes. */
+iframe[seamless] {
+  display: block;
+  background-color: transparent;
+  border: 0px none transparent;
+  padding:0px;
+  overflow: hidden;
+  height: 100vh;
+  width: 92vw;
+}

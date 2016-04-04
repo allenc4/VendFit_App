@@ -1,0 +1,19 @@
+body {
+  margin: 0;
+  background: -webkit-linear-gradient(top, rgb(32, 36, 63) 0%, rgb(67, 73, 107) 66%, rgb(52, 58, 92) 100%);
+  background: -o-linear-gradient(top, rgb(32, 36, 63) 0%, rgb(67, 73, 107) 66%, rgb(52, 58, 92) 100%);
+  background: -ms-linear-gradient(top, rgb(32, 36, 63) 0%, rgb(67, 73, 107) 66%, rgb(52, 58, 92) 100%);
+  background: -moz-linear-gradient(top, rgb(32, 36, 63) 0%, rgb(67, 73, 107) 66%, rgb(52, 58, 92) 100%);
+  background: linear-gradient(to bottom, rgb(32, 36, 63) 0%, rgb(67, 73, 107) 66%, rgb(52, 58, 92) 100%);
+  color: white;
+}
+.col-xs-12 {
+  background: none transparent;
+}
+
+.vended-purchase-img {
+	max-height: 300px;
+ 	max-width: 125px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}

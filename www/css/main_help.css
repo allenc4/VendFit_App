@@ -1,0 +1,23 @@
+body {
+	background:none transparent;
+	color: white;
+}
+
+.left-pad {
+    margin-left: 15px;
+}
+
+.row {
+    margin-right: 0px;
+}
+
+/* centered columns styles */
+.row-centered {
+    text-align:center;
+}
+.col-centered {
+    display:inline-block;
+    float:none;
+    /* inline-block space fix */
+    margin-right:-4px;
+}

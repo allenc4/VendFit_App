@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self'; script-src 'self'">
+
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.min.css">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/common.css">
+        <link rel="stylesheet" type="text/css" href="css/main.css">
+        
+        <!-- Custom styles for this template -->
+
+        <script src="js/jquery-2.2.0.min.js"></script>
+        <script src="js/common.js"></script>
+        <script src="js/main.js"></script>
+
+        <title>VendFit</title>
+    </head>
+    <body>
+        <div class="page-container">
+  
+            <!-- top navbar -->
+            <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+               <div class="container">
+                <div class="navbar-header">
+                   <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".sidebar-nav">
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                   </button>
+                   <a class="navbar-brand" href="#">VendFit</a>
+                </div>
+               </div>
+            </div>
+              
+            <div class="container">
+              <div class="row row-offcanvas row-offcanvas-left">
+                
+                <!-- sidebar -->
+                <div class="col-xs-6 col-sm-3 sidebar-offcanvas list-group" role="navigation">
+                    <ul class="nav" id="sidebar-nav">
+                      <li><a href="#" id="nav-home" class="list-group-item active text-center">Home</a></li>
+                      <li><a href="#" id="nav-help" class="list-group-item text-center">Help</a></li>
+                      <li><a href="#" id="nav-settings" class="list-group-item text-center">Settings</a></li>
+                      <li><a href="#" id="logout" class="btn btn-danger">Logout</a></li>
+                    </ul>
+                </div>
+            
+                <!-- main area -->
+                <div  class="col-xs-12 col-sm-9">
+                  <iframe seamless="seamless" id="main-content" src="main_content.html">
+                    Browser does not support inline frames.
+                  </iframe>
+                </div> <!-- /.col-xs-12 main -->
+
+                  <!-- <div class="text-center">
+                    <h4>Your Current Balance: 
+                      <div id="step-balance">0</div>
+                    </h4>
+                  </div>
+                  
+                  <ul class="list-group">
+                    <div id="main-product-list">
+
+                    </div>
+                  </ul> -->
+                  
+                
+            </div><!--/.row-->
+          </div><!--/.container-->
+
+        </div><!--/.page-container-->
+
+        <script type="text/javascript" src="cordova.js"></script>
+    </body>
+</html>

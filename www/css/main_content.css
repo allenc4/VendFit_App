@@ -1,0 +1,42 @@
+body {
+  margin: 0;
+  background: none transparent;
+  color: white;
+}
+
+ul hr{
+    border-style: none;
+}
+
+a {
+  color: white;
+}
+
+.vend-btn {
+  background-color: #034ba0;
+  color: white;
+}
+
+.nutrition-facts {
+  display: none;  
+}
+
+/*.nutrition-facts-title {
+  color: ;
+}*/
+  
+.text-center {
+  padding-top: 20px;
+}
+
+.itemImg {
+  max-height:125px;
+  max-width: 50px;
+}
+
+.list-group-item {
+	background: none transparent;
+	border-style: solid;
+    border-width: 2px 0px 0px 0px;
+    border-color: white;
+}
