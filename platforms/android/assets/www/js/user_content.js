@@ -1,37 +1,3 @@
-// Node.js server, running on port 8888 response
-// If the request was successful, {"success": true} and a {"data": ...} field will exist,
-// otherwise {"success": false"} and a {"message": ...} field will exist.
-
-/*
- JSON. Operation field = resource name, _, operation
- ex)
-    {
-        operation: "user_update",
-        data: {
-            access_token: "laksjdlkfajs;d",
-            user_id: "klsjdflk"
-        }
-    }
-
-  ex)
-    {
-        operation: "user_update",
-        data: {
-            access_token: "laksjdlkfajs;d"
-        }
-    }
-
-  ex)
-    {
-        "operation":"user_create",
-        "data":{
-            "fitbit_id":..,
-            "access_token":...
-        }
-    }
-
-*/
-
 // Define UserContent constructor
 var UserContent = function() {
     this.userID = getStoredData(prefixOauthStorage + keyUserID);
@@ -51,6 +17,9 @@ UserContent.prototype.getStepBalance = function() {
 };
 UserContent.prototype.setStepBalance = function(balance) {
     this.stepBalance = balance;
+};
+UserContent.prototype.getUserId = function() {
+    return this.userID;
 };
 
 UserContent.prototype.toJSON = function() {
@@ -196,6 +165,7 @@ UserContent.prototype.refreshData = function(successCallback) {
                     })(id)
                     
                 }
+
             }
         }, function(textStatus) {
             // Error occured communicating with the server
@@ -209,8 +179,6 @@ UserContent.prototype.purchase = function(item) {
 
     console.log("Running purchase function for itemID: " + item.getId());
 
-    var userInstance = this;
-
     // Ensure the user has enough points for the selected item.
     if (this.stepBalance < item.getCost()) {
         alert("Sorry, you do not have enough points to purchase a " + item.getName() + ". Start Walking!");
@@ -218,172 +186,183 @@ UserContent.prototype.purchase = function(item) {
     }
 
     // Otherwise, purchase it
-    var purchaseData = {
-        operation: 'item_purchase',
-        data: {
-            fitbit_id: this.userID,
-            item_id: item.getId(),
-            vending_machine_id: "1"
-        }
+    this.stepBalance -= item.getCost();
+    
+    // If the option to automatically log food is disabled, bring up the add_to_log page. Otherwise, run refreshData again
+    // Create a JSON object with the item and step balance
+    // Base64-encode the object; yields a url-appending string
+    // redirect to add_to_log page with /#... and fragment identifier (base64-encoded object)
+
+    console.log("key stored: " + valueStored(keyAutoLog) + ", value: " + getStoredData(keyAutoLog));
+
+    var params = {
+        item: item.toJSON(),
+        user: this.toJSON()
     };
 
-    serverQuery(JSON.stringify(purchaseData), function(data) {
-         if (!data.success) {
-            // If success is false, something went wrong
-            console.log(data.message);
-            alert(data.message);
-        } else {
-            // Purchase was successful.
-            // Update current balance
-            userInstance.stepBalance -= item.getCost();
+    if (getStoredData(keyAutoLog) === "true") {
+        // Automatically log food is enabled. So add it.
+        params.addToLog = true;
+        params = Base64.encode(JSON.stringify(params));
+        redirect("main.html#" + params);
+    } else {
+        // Preference is not set, so redirect to ask user if they would like to add it
+        params = Base64.encode(JSON.stringify(params));
+        // console.log("params: " + params);
 
-            // TODO if the option to automatically log food is disabled, bring up the add_to_log page. Otherwise, run refreshData again
-            // Create a JSON object with the item and step balance
-            // Base64-encode the object; yields a url-appending string
-            // redirect to add_to_log page with /#... and fragment identifier (base64-encoded object)
-
-            console.log("key stored: " + valueStored(keyAutoLog) + ", value: " + getStoredData(keyAutoLog));
-            if (getStoredData(keyAutoLog) === "true") {
-                // Automatically log food is enabled. So add it.
-                userInstance.addToFoodLog(item);
-            } else {
-                // Preference is not set, so redirect to ask user if they would like to add it
-                var params = {
-                    item: item.toJSON(),
-                    user: userInstance.toJSON()
-                };
-
-                params = Base64.encode(JSON.stringify(params));
-                // console.log("params: " + params);
-
-                redirect("add_to_log.html#" + params);
-            }
-
-        }
-
-    }, function(textStatus) {
-        // Error occured communicating with the server
-        alert(textStatus);
-    });
+        redirect("add_to_log.html#" + params);
+    }
 
 };
 
-UserContent.prototype.addToFoodLog = function(item) {
-    console.log("Running addToFoodLog function for itemID: " + item.getId());
 
-    var userInstance = this;
+// UserContent.prototype.purchaseAndAdd = function(item, add) {
+//     console.log("Running addToFoodLog function for itemID: " + item.getId());
+
+//     var userInstance = this;
+
+//     // Purchase item first from server
+//     var purchaseData = {
+//         operation: 'item_purchase',
+//         data: {
+//             fitbit_id: this.userID,
+//             item_id: item.getId(),
+//             vending_machine_id: "1"
+//         }
+//     };
+
+//     serverQuery(JSON.stringify(purchaseData), function(data) {
+//          if (!data.success) {
+//             // If success is false, something went wrong
+//             console.log(data.message);
+//             alert(data.message);
+//             redirect("main.html");
+//         } else {
+//             // Purchase was successful from the server
+//             if (add) {
+//                 addToLog();
+//             } else {
+//                 redirect("main.html");
+//             }
+//         }
+//     }, function(textStatus) {
+//         // Error occured communicating with the server
+//         alert(textStatus);
+//     });
 
 
-    // If the item is water, log as water. Otherwise, log it as food
-    if (item.getName().toLowerCase() === "water") {
+//     function addToLog() {
+//         // If the item is water, log as water. Otherwise, log it as food
+//         if (item.getName().toLowerCase() === "water") {
 
-        getUnitsAndAmount(function(unitType, defaultAmount) {
+//             getUnitsAndAmount(function(unitType, defaultAmount) {
 
-            var fitbitWaterURL = "https://api.fitbit.com/1/user/" + userInstance.userID + "/foods/log/water.json"
+//                 var fitbitWaterURL = "https://api.fitbit.com/1/user/" + userInstance.userID + "/foods/log/water.json"
 
-            $.ajax({
-                url: fitbitWaterURL,
-                type: 'POST',
-                dataType: 'json',
-                cache: false,
-                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                beforeSend: function(jqXHR, settings) { 
-                    jqXHR.setRequestHeader('Authorization','Bearer ' + userInstance.accessToken); 
-                },
-                data: {
-                    amount: defaultAmount * item.getServings(),
-                    date: currentDate(),
-                    unit: "fl oz"
-                }
-            })
-            .done(function(data, textStatus, jqXHR) {
-                console.log("Returned data: " + JSON.stringify(data));
-                console.log("Status code: " + jqXHR.status);
+//                 $.ajax({
+//                     url: fitbitWaterURL,
+//                     type: 'POST',
+//                     dataType: 'json',
+//                     cache: false,
+//                     contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+//                     beforeSend: function(jqXHR, settings) { 
+//                         jqXHR.setRequestHeader('Authorization','Bearer ' + userInstance.accessToken); 
+//                     },
+//                     data: {
+//                         amount: defaultAmount * item.getServings(),
+//                         date: currentDate(),
+//                         unit: "fl oz"
+//                     }
+//                 })
+//                 .done(function(data, textStatus, jqXHR) {
+//                     console.log("Returned data: " + JSON.stringify(data));
+//                     console.log("Status code: " + jqXHR.status);
 
-                window.plugins.toast.showShortBottom('The ' + item.getName().toLowerCase() + ' will be added to your Fitbit Account shortly!', function(a){
-                    console.log('toast success: ' + a)
-                }, function(b){
-                    alert('toast error: ' + b)
-                });
+//                     window.plugins.toast.showShortBottom('The ' + item.getName().toLowerCase() + ' will be added to your Fitbit Account shortly!', function(a){
+//                         console.log('toast success: ' + a)
+//                     }, function(b){
+//                         alert('toast error: ' + b)
+//                     });
 
-                redirect("main.html");
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) { 
-                console.log("err: " + JSON.stringify(jqXHR.responseText));
-                alert("An error occured while attempting to log item id " + item.getId() + " to the Fitbit food log."); 
-                redirect("main.html");
-            });
-        }, function(jqXHR) {
-            console.log("err: " + JSON.stringify(jqXHR.responseText));
-            alert("An error occured while querying Fitbit for the food information."); 
-            redirect("main.html");
-        });
-    } else {
-         // First, we need to get the Unit ID of the item from Fitbit
-        getUnitsAndAmount(function(unitType, defaultAmount) {
-             // Now add the item to the food log
-            var fitbitFoodLogRequestURL = "https://api.fitbit.com/1/user/" + userInstance.userID + "/foods/log.json";
-            $.ajax({
-                url: fitbitFoodLogRequestURL,
-                type: 'POST',
-                dataType: 'json',
-                cache: false,
-                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                beforeSend: function(jqXHR, settings) { 
-                    jqXHR.setRequestHeader('Authorization','Bearer ' + userInstance.accessToken); 
-                },
-                data: {
-                    foodId: item.getId(),
-                    mealTypeId: "7",
-                    unitId: unitType,
-                    amount: defaultAmount * item.getServings(),
-                    date: currentDate()
-                }
-            })
-            .done(function(data, textStatus, jqXHR) {
-                console.log("Returned data: " + JSON.stringify(data));
-                console.log("Status code: " + jqXHR.status);
-                redirect("main.html");
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) { 
-                console.log("err: " + JSON.stringify(jqXHR.responseText));
-                alert("An error occured while attempting to log item id " + item.getId() + " to the Fitbit food log."); 
-                redirect("main.html");
-            });
-        }, function(jqXHR) {
-            console.log("err: " + JSON.stringify(jqXHR.responseText));
-            alert("An error occured while querying Fitbit for the food information."); 
-            redirect("main.html");
-        });
+//                     redirect("main.html");
+//                 })
+//                 .fail(function(jqXHR, textStatus, errorThrown) { 
+//                     console.log("err: " + JSON.stringify(jqXHR.responseText));
+//                     alert("An error occured while attempting to log item id " + item.getId() + " to the Fitbit food log."); 
+//                     redirect("main.html");
+//                 });
+//             }, function(jqXHR) {
+//                 console.log("err: " + JSON.stringify(jqXHR.responseText));
+//                 alert("An error occured while querying Fitbit for the food information."); 
+//                 redirect("main.html");
+//             });
+//         } else {
+//              // First, we need to get the Unit ID of the item from Fitbit
+//             getUnitsAndAmount(function(unitType, defaultAmount) {
+//                  // Now add the item to the food log
+//                 var fitbitFoodLogRequestURL = "https://api.fitbit.com/1/user/" + userInstance.userID + "/foods/log.json";
+//                 $.ajax({
+//                     url: fitbitFoodLogRequestURL,
+//                     type: 'POST',
+//                     dataType: 'json',
+//                     cache: false,
+//                     contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+//                     beforeSend: function(jqXHR, settings) { 
+//                         jqXHR.setRequestHeader('Authorization','Bearer ' + userInstance.accessToken); 
+//                     },
+//                     data: {
+//                         foodId: item.getId(),
+//                         mealTypeId: "7",
+//                         unitId: unitType,
+//                         amount: defaultAmount * item.getServings(),
+//                         date: currentDate()
+//                     }
+//                 })
+//                 .done(function(data, textStatus, jqXHR) {
+//                     console.log("Returned data: " + JSON.stringify(data));
+//                     console.log("Status code: " + jqXHR.status);
+//                     redirect("main.html");
+//                 })
+//                 .fail(function(jqXHR, textStatus, errorThrown) { 
+//                     console.log("err: " + JSON.stringify(jqXHR.responseText));
+//                     alert("An error occured while attempting to log item id " + item.getId() + " to the Fitbit food log."); 
+//                     redirect("main.html");
+//                 });
+//             }, function(jqXHR) {
+//                 console.log("err: " + JSON.stringify(jqXHR.responseText));
+//                 alert("An error occured while querying Fitbit for the food information."); 
+//                 redirect("main.html");
+//             });
 
-    }
+//         }
+//     } // end inner addToLog function
 
-    function getUnitsAndAmount(callback, err) {
-          // First, we need to get the Unit ID of the item from Fitbit
-        var fitbitUnitRequestURL = "https://api.fitbit.com/1/foods/" + item.getId() + ".json";
+//     function getUnitsAndAmount(callback, err) {
+//         // First, we need to get the Unit ID of the item from Fitbit
+//         var fitbitUnitRequestURL = "https://api.fitbit.com/1/foods/" + item.getId() + ".json";
         
-        $.ajax({
-            url: fitbitUnitRequestURL,
-            type: 'GET',
-            dataType: 'json',
-            cache: false,
-            contentType: 'application/x-www-form-urlencoded',
-            beforeSend: function(jqXHR, settings) { 
-                jqXHR.setRequestHeader('Authorization','Bearer ' + userInstance.accessToken); 
-            }
-        })
-        .done(function(data, textStatus, jqXHR) { 
-            //Parse the data returned for the serving units
-            console.log("Returned data: " + JSON.stringify(data));
-            console.log("Status code: " + jqXHR.status);
-            var unitType = data.food.defaultUnit.id;
-            var defaultAmount = data.food.defaultServingSize;
-            callback(unitType, defaultAmount);
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            err(jqXHR);
-        });
+//         $.ajax({
+//             url: fitbitUnitRequestURL,
+//             type: 'GET',
+//             dataType: 'json',
+//             cache: false,
+//             contentType: 'application/x-www-form-urlencoded',
+//             beforeSend: function(jqXHR, settings) { 
+//                 jqXHR.setRequestHeader('Authorization','Bearer ' + userInstance.accessToken); 
+//             }
+//         })
+//         .done(function(data, textStatus, jqXHR) { 
+//             //Parse the data returned for the serving units
+//             console.log("Returned data: " + JSON.stringify(data));
+//             console.log("Status code: " + jqXHR.status);
+//             var unitType = data.food.defaultUnit.id;
+//             var defaultAmount = data.food.defaultServingSize;
+//             callback(unitType, defaultAmount);
+//         })
+//         .fail(function(jqXHR, textStatus, errorThrown) {
+//             err(jqXHR);
+//         });
 
-    }
+//     } // end inner getUnitsAndAmount function
 
-}
+// }; // end outer addToFoodLog function

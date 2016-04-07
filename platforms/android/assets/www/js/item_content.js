@@ -130,12 +130,29 @@ function createAddToLogForm(containerID, item, user) {
 
     	// TODO set event handlers for add-to-log and dont-add-to-log buttons
     	document.getElementById("btn-add-to-log").addEventListener("click", function() {
-    		user.addToFoodLog(item);
+    		  var params = {
+              item: item.toJSON(),
+              user: user.toJSON(),
+              addToLog: true
+          };
+
+          params = Base64.encode(JSON.stringify(params));
+          // console.log("params: " + params);
+
+          redirect("main.html#" + params);
         }, false);
         document.getElementById("btn-dont-add-to-log").addEventListener("click", function() {
-        	// Redirect to the main dashboard screen
-        	redirect("main.html");
-        });
+        	var params = {
+              item: item.toJSON(),
+              user: user.toJSON(),
+              addToLog: false
+          };
+
+          params = Base64.encode(JSON.stringify(params));
+          // console.log("params: " + params);
+
+          redirect("main.html#" + params);
+        }, false);
     }
 
 }

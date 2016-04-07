@@ -14,4 +14,8 @@ $(document).ready(function() {
 	var user = UserContent.fromJSON(paramObj.user);
 	createAddToLogForm("add-to-log-form", item, user);
 
+	document.addEventListener("backbutton", function() {
+		redirect("main.html");
+	}, false);
+
 });

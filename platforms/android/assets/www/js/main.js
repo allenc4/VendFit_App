@@ -38,8 +38,12 @@ $(document).ready(function() {
 
   setLogoutPosition();  
   $(window).on('resize', setLogoutPosition);
- 
+
+  // Start off by setting the user-content view of the iframe
+  $("#main-content").attr("src", "main_content.html#" + window.location.hash);
+
 });
+
 
 var navIDs = ["nav-home", "nav-help", "nav-settings"];
 
