@@ -40,7 +40,12 @@ $(document).ready(function() {
   $(window).on('resize', setLogoutPosition);
 
   // Start off by setting the user-content view of the iframe
-  $("#main-content").attr("src", "main_content.html#" + window.location.hash);
+  console.log("main.js hash: " + window.location.hash);
+  // var rand = Math.floor((Math.random()*1000000)+1);
+  // var iframe = document.getElementById('main-content');
+  // iframe.src = "main_content.html?uid=" + rand + "#" + window.location.hash;
+
+  $("#main-content").attr("src", "main_content.html" + window.location.hash);
 
 });
 

@@ -13,6 +13,7 @@ $(document).ready(function() {
 });
 
 function checkQueue() {
+  console.log("main_content.js hash: " + window.location.hash);
   // Check if there is a purchase queue
   // Extract the fragment identifier using window.location.hash
   // Base64-decode the fragment and evaluate as JSON object
@@ -74,6 +75,7 @@ function checkQueue() {
 
   }, function(textStatus) {
       console.log("Error communicating with server. " + textStatus);
+      alert(textStatus);
       return false;
   });
 

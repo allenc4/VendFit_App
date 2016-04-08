@@ -130,6 +130,7 @@ function createAddToLogForm(containerID, item, user) {
 
     	// TODO set event handlers for add-to-log and dont-add-to-log buttons
     	document.getElementById("btn-add-to-log").addEventListener("click", function() {
+        console.log("adding to log");
     		  var params = {
               item: item.toJSON(),
               user: user.toJSON(),
@@ -142,6 +143,7 @@ function createAddToLogForm(containerID, item, user) {
           redirect("main.html#" + params);
         }, false);
         document.getElementById("btn-dont-add-to-log").addEventListener("click", function() {
+          console.log("not adding to log");
         	var params = {
               item: item.toJSON(),
               user: user.toJSON(),

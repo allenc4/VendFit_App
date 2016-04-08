@@ -98,7 +98,8 @@ function loginSuccess(token, userID) {
                     operation: 'user_create',
                     data: {
                         fitbit_id: userID,
-                        access_token: token
+                        access_token: token,
+                        timezone_offset: new Date().getTimezoneOffset()
                     }
                 };
 
@@ -123,7 +124,8 @@ function loginSuccess(token, userID) {
                     operation: 'user_update',
                     data: {
                         id: userID,
-                        access_token: token
+                        access_token: token,
+                        timezone_offset: new Date().getTimezoneOffset()
                     }
                 };
 

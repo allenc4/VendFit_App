@@ -72,10 +72,14 @@ function serverQuery(jsonData, successCallback, errorCallback) {
         cache: false,
         contentType: 'application/x-www-form-urlencoded',
         data: jsonData, 
-        timeout: 10000  // 10 second timeout
+        timeout: 3000  // 3 second timeout
     })
     .done(function(data, textStatus, jqXHR) { 
-        successCallback(data);
+        if (data.success) {
+            successCallback(data);
+        } else {
+            errorCallback(data.message);
+        }
     })
     .fail(function(jqXHR, textStatus, errorThrown) { 
         console.log(JSON.stringify(jqXHR));

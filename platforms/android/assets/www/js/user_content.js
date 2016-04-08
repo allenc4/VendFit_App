@@ -179,9 +179,12 @@ UserContent.prototype.purchase = function(item) {
 
     console.log("Running purchase function for itemID: " + item.getId());
 
-    // Ensure the user has enough points for the selected item.
+    // Ensure the user has enough points for the selected item and that its in stock.
     if (this.stepBalance < item.getCost()) {
         alert("Sorry, you do not have enough points to purchase a " + item.getName() + ". Start Walking!");
+        return;
+    } else if (item.getStock() <= 0) {
+        alert("Sorry, the " + item.getName().toLowerCase() + " is out of stock.");
         return;
     }
 
