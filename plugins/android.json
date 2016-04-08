@@ -7,19 +7,19 @@
         "files": {}
     },
     "installed_plugins": {
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.vendfit.app"
+        },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.vendfit.app"
         },
-        "cordova-plugin-inappbrowser": {
+        "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.vendfit.app"
         },
         "cordova-sqlite-storage": {
             "PACKAGE_NAME": "com.vendfit.app"
         },
         "org.apache.cordova.plugin.cache": {
-            "PACKAGE_NAME": "com.vendfit.app"
-        },
-        "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.vendfit.app"
         }
     },
