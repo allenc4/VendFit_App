@@ -56,7 +56,7 @@ function valueStored(key) {
 }
 
 function redirect(page) {
-    window.top.location.href =page;
+    window.top.location.replace(page);
 }
 
 function serverQuery(jsonData, successCallback, errorCallback) {

@@ -19,12 +19,17 @@ body {
 }
 
 .user-signin {
-  max-width: 330px;
+  /*max-width: 330px;*/
   padding: 15px;
   margin: 0 auto;
 }
 .user-signin .user-signin-heading {
   margin-bottom: 10px;
+}
+
+.user-signin-heading span{
+  border: 2px solid white;
+  padding: 0px 25px 0px 25px;
 }
 
 .user-signin .btn {

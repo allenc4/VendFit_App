@@ -44,7 +44,8 @@ function checkQueue() {
           fitbit_id: user.getUserId(),
           item_id: item.getId(),
           vending_machine_id: "1",
-          addToLog: paramObj.addToLog
+          addToLog: paramObj.addToLog,
+          date_updated: currentDate()
       }
   };
 

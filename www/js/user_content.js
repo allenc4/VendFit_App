@@ -201,11 +201,15 @@ UserContent.prototype.purchase = function(item) {
     };
 
     if (getStoredData(keyAutoLog) === "true") {
+        console.log("Automatically adding to fitbit diary");
         // Automatically log food is enabled. So add it.
         params.addToLog = true;
         params = Base64.encode(JSON.stringify(params));
-        redirect("main.html#" + params);
+        window.location.hash ="#" + params;
+        window.location.reload();
+        //redirect("main.html#" + params);
     } else {
+        console.log("Auto log preference not set, so we must ask...");
         // Preference is not set, so redirect to ask user if they would like to add it
         params = Base64.encode(JSON.stringify(params));
         // console.log("params: " + params);
